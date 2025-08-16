@@ -1,0 +1,11 @@
+.dropdown-menu.bg-dark .dropdown-item:hover{
+    background-color: orange;
+
+}
+
+
+
+
+.nav-item{
+    padding-left:5px;
+}
