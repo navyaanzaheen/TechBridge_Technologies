@@ -1,116 +1,253 @@
 import React, { useState } from "react";
-import { FaSearch, FaBars } from "react-icons/fa";
-import './Navbar.css';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  // Divider,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Link as ScrollLink } from "react-scroll";
 
-export default function NavbarBootstrap() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+// Outlined icons (inactive)
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import ContactMailOutlinedIcon from "@mui/icons-material/ContactMailOutlined";
+
+// Filled icons (active)
+import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
+import BuildIcon from "@mui/icons-material/Build";
+import StarIcon from "@mui/icons-material/Star";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+
+export default function Navbar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("Home");
+  const theme = useTheme();
+
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+
+  const menuItems = [
+    { text: "Home", path: "home" },
+    { text: "About", path: "about" },
+    { text: "Services", path: "services" },
+    { text: "Testimonials", path: "testimonials" },
+    { text: "Contact", path: "contact" },
+  ];
+
+  // Map icons for active/inactive state
+  const iconMap = {
+    Home: { filled: <HomeIcon />, outlined: <HomeOutlinedIcon /> },
+    About: { filled: <InfoIcon />, outlined: <InfoOutlinedIcon /> },
+    Services: { filled: <BuildIcon />, outlined: <BuildOutlinedIcon /> },
+    Testimonials: {
+      filled: <StarIcon />,
+      outlined: <StarOutlineOutlinedIcon />,
+    },
+    Contact: {
+      filled: <ContactMailIcon />,
+      outlined: <ContactMailOutlinedIcon />,
+    },
+  };
+
+  const drawer = (
+    <Box sx={{ textAlign: "center", p: 2 }}>
+      {/* Logo */}
+      <Box
+        sx={{
+          mb: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src="/images/techbridgetechnologies_logo-removebg-preview.png"
+          alt="TechBridge Logo"
+          style={{
+            width: "60px",
+            height: "auto",
+            transition: "transform 0.3s",
+            textAlign: "left",
+          }}
+        />
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#6A0DAD",
+            fontWeight: "bold",
+            fontSize: "1rem",
+            whiteSpace: "nowrap",
+          }}
+        ></Typography>
+      </Box>
+
+      {/* Drawer Links */}
+      <List sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        {menuItems.map((item) => {
+          const isActive = activeLink === item.text;
+          return (
+            <ListItem key={item.text} disablePadding>
+              <ScrollLink
+                to={item.path}
+                smooth={true}
+                duration={600}
+                offset={-70}
+                spy={true}
+                onSetActive={() => setActiveLink(item.text)}
+                onClick={handleDrawerToggle}
+                style={{ width: "100%", textDecoration: "none" }}
+              >
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={
+                    <Box
+                      sx={{
+                        width: 30,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {isActive
+                        ? iconMap[item.text].filled
+                        : iconMap[item.text].outlined}
+                    </Box>
+                  }
+                  sx={{
+                    justifyContent: "flex-start",
+                    color: isActive ? "#4B0082" : "#B266FF",
+                    borderColor: "#6A0DAD",
+                    fontWeight: 600,
+                    textTransform: "none",
+                    borderRadius: 0,
+                    background: "transparent",
+                    "& .MuiButton-startIcon": { marginRight: 1 },
+                    "&:hover": {
+                      borderColor: "#4B0082",
+                      color: "#4B0082",
+                      background: "transparent",
+                      "& .MuiButton-startIcon": { color: "#4B0082" },
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary={item.text}
+                    primaryTypographyProps={{
+                      sx: {
+                        color: isActive ? "#4B0082" : "#B266FF",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                      },
+                    }}
+                  />
+                </Button>
+              </ScrollLink>
+            </ListItem>
+          );
+        })}
+      </List>
+      {/* <Divider sx={{ mt: 2 }} /> */}
+    </Box>
+  );
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="navbar navbar-expand-md navbar-dark bg-dark px-4">
-        {/* Left: Logo */}
-        <a className="navbar-brand" href="/">
-          <img src="images/logo.png" alt="Logo" height="40" />
-        </a>
+      <AppBar
+        position="sticky"
+        sx={{
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+          borderRadius: 0,
+        }}
+      >
+        <Toolbar>
+          {/* Logo + Brand Name */}
+          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+            <img
+              src="/images/White.png"
+              alt="TechBridge Logo"
+              style={{ height: "54px", marginRight: "10px",marginBottom:'3px'}}
+            />
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#fff" }}
+            ></Typography>
+          </Box>
 
-        {/* Center: Links */}
-        <div className="collapse navbar-collapse justify-content-center">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">About</a>
-            </li>
-
-            {/* Dropdown */}
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle text-white"
-                href="/"
-                id="servicesDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Services
-              </a>
-              <ul className="dropdown-menu bg-dark w-75" aria-labelledby="servicesDropdown">
-                <li><a className="dropdown-item text-white" href="/">Web Development</a></li>
-                <li><a className="dropdown-item text-white" href="/">App Development</a></li>
-                <li><a className="dropdown-item text-white" href="/">SEO</a></li>
-              </ul>
-            </li>
-
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">Our Clients</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">Career</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">Blog</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="/">Contact Us</a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Right: Search + Separator + Drawer Button */}
-        <div className="d-flex align-items-center gap-3">
-          <FaSearch className="text-white" style={{ cursor: "pointer" }} />
-          <div style={{ width: "1px", height: "24px", background: "white" }}></div>
-          <FaBars
-            className="text-white"
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsDrawerOpen(true)}
-          />
-        </div>
-      </nav>
-
-      <div>
-        <hr style={{color:'lightgray'}}/>
-      </div>
-
-      {/* Drawer */}
-      {isDrawerOpen && (
-        <div
-          className="position-fixed top-0 end-0 bg-white text-dark p-4"
-          style={{
-            width: "260px",
-            height: "100vh",
-            boxShadow: "-2px 0 5px rgba(0,0,0,0.3)",
-            zIndex: 1050,
-          }}
-        >
-          <button
-            className="border-0 rounded-circle position-absolute"
-            style={{
-              backgroundColor: "grey",
-              color: "white",
-              width: "32px",
-              height: "32px",
-              fontSize: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              top:"15px",
-              right:"15px"
-            }}
-            onClick={() => setIsDrawerOpen(false)}
+          {/* Desktop Menu */}
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
-            ✕
-          </button>
+            {menuItems.map((item) => (
+              <ScrollLink
+                key={item.text}
+                to={item.path}
+                smooth={true}
+                duration={600}
+                offset={-70}
+                spy={true}
+                onSetActive={() => setActiveLink(item.text)}
+              >
+                <Button
+                  disableRipple
+                  sx={{
+                    color: "#fff",
+                    fontWeight: 300,
+                    textTransform: "none",
+                    background: "transparent !important",
+                    borderBottom:
+                      activeLink === item.text ? "2px solid #fff" : "none",
+                    borderRadius: 0,
+                  }}
+                >
+                  {item.text}
+                </Button>
+              </ScrollLink>
+            ))}
+          </Box>
 
-          {/* Drawer content */}
-          <div className="row g-2 mt-4">
-           
-          </div>
-        </div>
-      )}
+          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button */}
+          <IconButton
+            color="inherit"
+            edge="end"
+            sx={{
+              display: { md: "none" },
+              width: 56, // Same as logo height
+              height: 56,
+              marginTop:'17px',
+            }}
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon sx={{ fontSize: 50 }} /> {/* Icon size */}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: 240,
+            backgroundColor: theme.palette.background.paper,
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </>
   );
 }
